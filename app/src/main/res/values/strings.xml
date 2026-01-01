@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">ZenFocus</string>
+    <string name="tap_to_start_hint">Tap to Start • Long Press to Edit</string>
+    <string name="settings_title">Settings</string>
+    <string name="dark_theme_label">Dark Theme</string>
+    <string name="select_font_label">Select Font</string>
+    <string name="set_timer_label">Set Timer</string>
+    <string name="custom_time_label">Custom Time</string>
+    <string name="set_custom_time_button">Set Custom Time</string>
+    <string name="reset_timer_button">Reset Timer</string>
+    <string name="time_separator">:</string>
 </resources>

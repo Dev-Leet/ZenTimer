@@ -12,12 +12,15 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -54,6 +57,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -146,7 +150,7 @@ fun MainScreen(viewModel: TimerViewModel) {
             // Helpful hint for first time users (optional, usually discrete)
             if (!uiState.isRunning && uiState.timeRemainingMillis == uiState.initialTimeMillis) {
                  Text(
-                    text = "Tap to Start • Long Press to Edit",
+                    text = stringResource(R.string.tap_to_start_hint),
                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f), // Adapted for theme
                     fontSize = 12.sp,
                     modifier = Modifier
@@ -218,17 +222,6 @@ fun SettingsSheet(
     var s1 by remember { mutableStateOf(initialS / 10) }
     var s2 by remember { mutableStateOf(initialS % 10) }
 
-    // Define custom colors for the input selector boxes
-    val selectorColors = OutlinedTextFieldDefaults.colors(
-        focusedTextColor = MaterialTheme.colorScheme.onSurface,
-        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-        focusedBorderColor = MaterialTheme.colorScheme.primary,
-        unfocusedBorderColor = MaterialTheme.colorScheme.secondary,
-        focusedContainerColor = MaterialTheme.colorScheme.surface,
-        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-        cursorColor = MaterialTheme.colorScheme.primary
-    )
-    
     // Helper to run custom set and dismiss
     val onSetCustomTime = {
         val hours = h1 * 10 + h2
@@ -247,11 +240,12 @@ fun SettingsSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Settings", 
+                text = stringResource(R.string.settings_title), 
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -264,7 +258,7 @@ fun SettingsSheet(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
             ) {
-                Text("Dark Theme", color = MaterialTheme.colorScheme.onSurface)
+                Text(stringResource(R.string.dark_theme_label), color = MaterialTheme.colorScheme.onSurface)
                 Switch(
                     checked = isDarkTheme,
                     onCheckedChange = onThemeChanged,
@@ -279,7 +273,7 @@ fun SettingsSheet(
             
             Spacer(modifier = Modifier.height(24.dp))
             
-            Text("Select Font", color = MaterialTheme.colorScheme.secondary)
+            Text(stringResource(R.string.select_font_label), color = MaterialTheme.colorScheme.secondary)
             Spacer(modifier = Modifier.height(8.dp))
             
             Row {
@@ -299,7 +293,7 @@ fun SettingsSheet(
             
             Spacer(modifier = Modifier.height(24.dp))
             
-            Text("Set Timer", color = MaterialTheme.colorScheme.secondary)
+            Text(stringResource(R.string.set_timer_label), color = MaterialTheme.colorScheme.secondary)
             Spacer(modifier = Modifier.height(8.dp))
             Row {
                 val presets = listOf(10, 25, 45, 60)
@@ -319,7 +313,7 @@ fun SettingsSheet(
             Spacer(modifier = Modifier.height(24.dp))
 
             // NEW Custom Time Implementation
-            Text("Custom Time", color = MaterialTheme.colorScheme.secondary)
+            Text(stringResource(R.string.custom_time_label), color = MaterialTheme.colorScheme.secondary)
             Spacer(modifier = Modifier.height(8.dp))
             
             Row(
@@ -328,16 +322,16 @@ fun SettingsSheet(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 // Hours
-                DigitSelector(selectedDigit = h1, onDigitSelected = { h1 = it }, colors = selectorColors)
-                DigitSelector(selectedDigit = h2, onDigitSelected = { h2 = it }, colors = selectorColors)
+                DigitSelector(selectedDigit = h1, onDigitSelected = { h1 = it })
+                DigitSelector(selectedDigit = h2, onDigitSelected = { h2 = it })
                 TimeSeparator()
                 // Minutes
-                DigitSelector(selectedDigit = m1, onDigitSelected = { m1 = it }, colors = selectorColors, maxDigit = 5) // M1 can only be 0-5
-                DigitSelector(selectedDigit = m2, onDigitSelected = { m2 = it }, colors = selectorColors)
+                DigitSelector(selectedDigit = m1, onDigitSelected = { m1 = it }, maxDigit = 5) // M1 can only be 0-5
+                DigitSelector(selectedDigit = m2, onDigitSelected = { m2 = it })
                 TimeSeparator()
                 // Seconds
-                DigitSelector(selectedDigit = s1, onDigitSelected = { s1 = it }, colors = selectorColors, maxDigit = 5) // S1 can only be 0-5
-                DigitSelector(selectedDigit = s2, onDigitSelected = { s2 = it }, colors = selectorColors)
+                DigitSelector(selectedDigit = s1, onDigitSelected = { s1 = it }, maxDigit = 5) // S1 can only be 0-5
+                DigitSelector(selectedDigit = s2, onDigitSelected = { s2 = it })
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -348,7 +342,7 @@ fun SettingsSheet(
                     containerColor = MaterialTheme.colorScheme.primary
                 )
             ) {
-                Text("Set Custom Time", color = MaterialTheme.colorScheme.onPrimary)
+                Text(stringResource(R.string.set_custom_time_button), color = MaterialTheme.colorScheme.onPrimary)
             }
             
             Spacer(modifier = Modifier.height(24.dp))
@@ -357,7 +351,7 @@ fun SettingsSheet(
                 onClick = onReset,
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
             ) {
-                Text("Reset Timer", color = Color.White)
+                Text(stringResource(R.string.reset_timer_button), color = Color.White)
             }
             
             Spacer(modifier = Modifier.height(24.dp))
@@ -368,7 +362,7 @@ fun SettingsSheet(
 @Composable
 private fun TimeSeparator() {
     Text(
-        text = ":", 
+        text = stringResource(R.string.time_separator), 
         style = MaterialTheme.typography.titleLarge, 
         color = MaterialTheme.colorScheme.onSurface,
         modifier = Modifier.padding(horizontal = 4.dp)
@@ -380,7 +374,6 @@ private fun TimeSeparator() {
 private fun DigitSelector(
     selectedDigit: Int,
     onDigitSelected: (Int) -> Unit,
-    colors: androidx.compose.material3.TextFieldColors,
     maxDigit: Int = 9
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -396,20 +389,30 @@ private fun DigitSelector(
             expanded = expanded,
             onExpandedChange = { expanded = !expanded },
         ) {
-            OutlinedTextField(
-                value = selectedText,
-                onValueChange = {}, // Not editable by typing
-                readOnly = true,
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                colors = colors,
-                modifier = Modifier.menuAnchor(),
-                textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center)
-            )
+            Box(
+                modifier = Modifier
+                    .menuAnchor()
+                    .height(56.dp)
+                    .fillMaxWidth()
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.outline,
+                        shape = RoundedCornerShape(4.dp)
+                    )
+                    .clickable { expanded = true },
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = selectedText,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center
+                )
+            }
             
             ExposedDropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
-                // Limit the width of the dropdown itself
                 modifier = Modifier.width(48.dp) 
             ) {
                 digits.forEach { digitString ->
