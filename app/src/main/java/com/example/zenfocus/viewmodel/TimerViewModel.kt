@@ -29,7 +29,8 @@ data class TimerUiState(
     val selectedFont: TimerFont = TimerFont.MODERN,
     val currentTimeString: String = "",
     val showSettingsSheet: Boolean = false,
-    val initialTimeMillis: Long = 25 * 60 * 1000L
+    val initialTimeMillis: Long = 25 * 60 * 1000L,
+    val isDarkTheme: Boolean = true // Default to dark theme
 )
 
 class TimerViewModel : ViewModel() {
@@ -49,7 +50,7 @@ class TimerViewModel : ViewModel() {
             while (isActive) {
                 val now = LocalTime.now()
                 val formatter = DateTimeFormatter.ofPattern("h:mm a")
-                _uiState.update { it.copy(currentTimeString = now.format(formatter)) }
+                _uiState.update { it.copy(currentTimeString = now.format(formatter).uppercase()) }
                 delay(1000)
             }
         }
@@ -106,6 +107,10 @@ class TimerViewModel : ViewModel() {
 
     fun updateFont(font: TimerFont) {
         _uiState.update { it.copy(selectedFont = font) }
+    }
+
+    fun toggleTheme(isDark: Boolean) {
+        _uiState.update { it.copy(isDarkTheme = isDark) }
     }
 
     fun showSettings(show: Boolean) {

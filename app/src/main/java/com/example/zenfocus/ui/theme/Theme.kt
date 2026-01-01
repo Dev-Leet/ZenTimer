@@ -28,19 +28,32 @@ private val DarkColorScheme = darkColorScheme(
     onSurface = White
 )
 
+private val LightColorScheme = lightColorScheme(
+    primary = DarkPrimary,
+    secondary = SoftTeal,
+    tertiary = MutedLavender,
+    background = LightGray,
+    surface = White,
+    onPrimary = White,
+    onSecondary = DarkText,
+    onTertiary = DarkText,
+    onBackground = DarkText,
+    onSurface = DarkText
+)
+
 @Composable
 fun ZenFocusTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    // Strictly Dark Mode
-    val colorScheme = DarkColorScheme
+    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
 
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
             window.statusBarColor = colorScheme.background.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
 

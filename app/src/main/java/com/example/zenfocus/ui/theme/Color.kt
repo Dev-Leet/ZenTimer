@@ -13,3 +13,8 @@ val White = Color(0xFFFFFFFF)
 
 // Additional soothing colors if needed
 val SoftGreen = Color(0xFFA5D6A7)
+
+// Light Theme Colors
+val DarkPrimary = Color(0xFF00ACC1) // Darker teal/cyan for primary in light theme
+val LightGray = Color(0xFFF0F0F0) // Light background
+val DarkText = Color(0xFF333333) // Dark text on light background
